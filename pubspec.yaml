@@ -1,7 +1,8 @@
 name: navigator_utils
 description: A new Flutter project.
 version: 0.0.1
-homepage:
+
+publish_to: 'none'
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -10,6 +11,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  hl_core:
+    git:
+      url: https://hl:x1zS_EnuiYeHt-TTgzRF@gitlab.wuren.com/highlight/hl-core.git
+      ref: 96a1f50fe82fd18f08ebd3988b9791d095eba2b8
 
 dev_dependencies:
   flutter_test:
