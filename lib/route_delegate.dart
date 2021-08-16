@@ -17,6 +17,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     this.transitionDelegate = const DefaultTransitionDelegate<dynamic>(),
   }) : navigatorKey = GlobalKey<NavigatorState>();
 
+  static const String PATH_HOME = '/';
+
   final TransitionDelegate<dynamic> transitionDelegate;
 
   final List<NavigatorObserver>? observers;
@@ -71,18 +73,22 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     return navigator;
   }
 
-  @override
-  Future<void> setNewRoutePath(PageConfiguration configuration) {
-    printD('[Navigator] setNewRoutePath ${configuration.path}');
-    final bool shouldAddPage = pages.isEmpty ||
-        ((pages.last.pageConfiguration).path != configuration.path);
+  Future<void> setRootWidget(Widget rootWidget) async {
+    printD('[Navigator] setRootWidget $rootWidget');
+    final PageConfiguration configuration = PageConfiguration(path: PATH_HOME, child: rootWidget);
+    setNewRoutePath(configuration);
+  }
 
-    if (shouldAddPage) {
-      pages
-        ..clear()
-        ..add(configuration.toPage());
+  @override
+  Future<void> setNewRoutePath(PageConfiguration configuration) async {
+    printD('[Navigator] setNewRoutePath ${configuration.path}');
+    if (pages.isNotEmpty) {
+      return;
     }
-    return SynchronousFuture<void>(null);
+
+    pages
+      ..clear()
+      ..add(configuration.toPage());
   }
 
   bool isExist(Widget child) {
