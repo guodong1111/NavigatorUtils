@@ -8,12 +8,6 @@ import 'page_state_mapping.dart';
 
 class NavigatorUtils {
 
-  static PageStateMapping? _stateMapping;
-
-  static setStateMapping(PageStateMapping stateMapping) {
-    _stateMapping = stateMapping;
-  }
-
   static Future<dynamic> push(
     BuildContext context,
     Widget child, {
@@ -32,9 +26,7 @@ class NavigatorUtils {
     final AppRouterDelegate delegate = AppRouterDelegate.of(context);
 
     final PageParameter pageParameter = PageParameter(
-        state: pageState ??
-            _stateMapping?.getState(child, delegate.isExist) ??
-            PageState.none,
+        state: pageState,
         fullscreenDialog: fullscreenDialog,
         maintainState: maintainState,
         transitionType: transitionType,

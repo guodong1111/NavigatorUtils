@@ -21,14 +21,14 @@ enum TransitionType {
 
 class PageParameter {
   const PageParameter(
-      {this.state = PageState.none,
+      {this.state,
       this.fullscreenDialog = false,
       this.maintainState = true,
       this.transitionType = TransitionType.none,
       this.transition,
       this.brightness});
 
-  final PageState state;
+  final PageState? state;
   final bool fullscreenDialog;
   final Brightness? brightness;
   final bool maintainState;

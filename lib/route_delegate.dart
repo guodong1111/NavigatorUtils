@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hl_core/utils/print.dart';
 
+import 'navigator.dart';
 import 'navigator_manager.dart';
 import 'route_page.dart';
 
@@ -14,6 +15,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
   AppRouterDelegate({
     this.observers,
+    this.stateMapping,
     this.transitionDelegate = const DefaultTransitionDelegate<dynamic>(),
   }) : navigatorKey = GlobalKey<NavigatorState>();
 
@@ -23,6 +25,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   final List<NavigatorObserver>? observers;
   final NavigatorManager navigatorManager = NavigatorManager.getInstance();
+
+  final PageStateMapping? stateMapping;
 
   List<RoutePage<dynamic>> get pages => navigatorManager.pages;
 
@@ -163,7 +167,11 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   RoutePage<T?> _navigatePage<T extends Object?>(RoutePage<T?> page) {
-    final PageState pageState = page.pageConfiguration.pageParameter.state;
+    final Widget child = page.pageConfiguration.child;
+    final PageState pageState = page.pageConfiguration.pageParameter.state ??
+        stateMapping?.getState(child, isExist) ??
+        PageState.none;
+
     switch (pageState) {
       case PageState.replace:
         pages.removeLast();
