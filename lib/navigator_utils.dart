@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hl_core/base/screen.dart';
 import 'package:hl_core/common/brightness.dart';
 import 'package:hl_core/utils/print.dart';
+import 'package:hl_core/extension/standard.dart';
+import 'package:hl_core/extension/list_ext.dart';
 
 import 'navigator.dart';
 import 'page_state_mapping.dart';
@@ -58,6 +61,29 @@ class NavigatorUtils {
     if (canPop(context)) {
       delegate.mayBePop(result);
     }
+  }
+
+  static bool handleBackPressed(BuildContext context) {
+    final Widget? currentWidget = getCurrentWidget(context);
+    if (currentWidget is! Screen) {
+      return false;
+    }
+
+    return currentWidget.events[ScreenEvent.backPressed]?.run(null) ?? false;
+  }
+
+  static bool handlePushEvent<T>(BuildContext context, T data) {
+    final Widget? currentWidget = getCurrentWidget(context);
+    if (currentWidget is! Screen) {
+      return false;
+    }
+
+    return currentWidget.events[ScreenEvent.pushMessage]?.run(data) ?? false;
+  }
+
+  static Widget? getCurrentWidget(BuildContext context) {
+    final AppRouterDelegate delegate = AppRouterDelegate.of(context);
+    return delegate.pages.lastOrNull()?.pageConfiguration.child;
   }
 
 }

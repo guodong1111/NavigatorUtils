@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:hl_core/utils/print.dart';
 
 import 'navigator.dart';
-import 'navigator_manager.dart';
 import 'route_page.dart';
 
 /// Signature for the [AppRouterDelegate.popUntil] predicate argument.
@@ -24,11 +23,10 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   final TransitionDelegate<dynamic> transitionDelegate;
 
   final List<NavigatorObserver>? observers;
-  final NavigatorManager navigatorManager = NavigatorManager.getInstance();
 
   final PageStateMapping? stateMapping;
 
-  List<RoutePage<dynamic>> get pages => navigatorManager.pages;
+  final List<RoutePage<dynamic>> pages = <RoutePage<dynamic>>[];
 
   @override
   final GlobalKey<NavigatorState> navigatorKey;
