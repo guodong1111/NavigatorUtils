@@ -1,8 +1,10 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hl_core/base/screen.dart';
 import 'package:hl_core/utils/print.dart';
+import 'package:hl_core/extension/standard.dart';
+import 'package:hl_core/extension/list_ext.dart';
 
 import 'navigator.dart';
 import 'route_page.dart';
@@ -233,5 +235,27 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   /// call this after you change pages
   void _updatePages() {
     notifyListeners();
+  }
+
+  bool handleBackPressed() {
+    final Widget? currentWidget = getCurrentWidget();
+    if (currentWidget is! Screen) {
+      return false;
+    }
+
+    return currentWidget.events[ScreenEvent.backPressed]?.run(null) ?? false;
+  }
+
+  bool handlePushEvent<T>(T data) {
+    final Widget? currentWidget = getCurrentWidget();
+    if (currentWidget is! Screen) {
+      return false;
+    }
+
+    return currentWidget.events[ScreenEvent.pushMessage]?.run(data) ?? false;
+  }
+
+  Widget? getCurrentWidget() {
+    return pages.lastOrNull()?.pageConfiguration.child;
   }
 }
