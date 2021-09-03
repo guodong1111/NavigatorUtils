@@ -10,7 +10,7 @@ class AppBackButtonDispatcher extends RootBackButtonDispatcher {
 
   @override
   Future<bool> didPopRoute() async {
-    if (_routerDelegate.handleBackPressed()) {
+    if (await _routerDelegate.handleBackPressed()) {
       return true;
     }
 

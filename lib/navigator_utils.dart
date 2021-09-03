@@ -59,14 +59,13 @@ class NavigatorUtils {
     }
   }
 
-  static bool handleBackPressed(BuildContext context) {
+  static Future<bool> handleBackPressed(BuildContext context) async {
     final AppRouterDelegate delegate = AppRouterDelegate.of(context);
     return delegate.handleBackPressed();
   }
 
-  static bool handlePushEvent<T>(BuildContext context, T data) {
+  static Future<bool> handlePushEvent<T>(BuildContext context, T data) async {
     final AppRouterDelegate delegate = AppRouterDelegate.of(context);
     return delegate.handlePushEvent(data);
   }
-
 }

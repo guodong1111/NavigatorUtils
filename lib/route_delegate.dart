@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hl_core/base/screen.dart';
-import 'package:hl_core/utils/print.dart';
-import 'package:hl_core/extension/standard.dart';
 import 'package:hl_core/extension/list_ext.dart';
+import 'package:hl_core/extension/standard.dart';
+import 'package:hl_core/utils/print.dart';
 
 import 'navigator.dart';
 import 'route_page.dart';
@@ -172,6 +172,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
         stateMapping?.getState(child, isExist) ??
         PageState.none;
 
+    updateWidgetIfNeed(page);
+
     switch (pageState) {
       case PageState.replace:
         pages.removeLast();
@@ -237,22 +239,42 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     notifyListeners();
   }
 
-  bool handleBackPressed() {
-    final Widget? currentWidget = getCurrentWidget();
-    if (currentWidget is! Screen) {
+  Future<bool> updateWidgetIfNeed<T>(RoutePage<T?> page) async {
+    final RoutePage? oldRoutePage = pages
+        .whereType<RoutePage<T?>>()
+        .singleWhereOrNull((element) => element.key == page.key);
+    final Widget? oldWidget = oldRoutePage?.pageConfiguration.child;
+    if (oldWidget is! Screen) {
       return false;
     }
 
-    return currentWidget.events[ScreenEvent.backPressed]?.run(null) ?? false;
+    final Widget newWidget = page.pageConfiguration.child;
+    if (oldWidget.runtimeType != newWidget.runtimeType) {
+      return false;
+    }
+
+    return await oldWidget.events[ScreenEvent.update]?.run(newWidget) ??
+        false;
   }
 
-  bool handlePushEvent<T>(T data) {
+  Future<bool> handleBackPressed() async {
     final Widget? currentWidget = getCurrentWidget();
     if (currentWidget is! Screen) {
       return false;
     }
 
-    return currentWidget.events[ScreenEvent.pushMessage]?.run(data) ?? false;
+    return await currentWidget.events[ScreenEvent.backPressed]?.run(null) ??
+        false;
+  }
+
+  Future<bool> handlePushEvent<T>(T data) async {
+    final Widget? currentWidget = getCurrentWidget();
+    if (currentWidget is! Screen) {
+      return false;
+    }
+
+    return await currentWidget.events[ScreenEvent.pushMessage]?.run(data) ??
+        false;
   }
 
   Widget? getCurrentWidget() {
