@@ -99,8 +99,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     final Key? key = child.key;
     final String path = getPath(child);
     return pages.indexWhere((RoutePage<dynamic> element) =>
-            element.pageConfiguration.key == key &&
-            element.pageConfiguration.path == path) >=
+            element.pageConfiguration.path == path &&
+            element.pageConfiguration.key == key) >=
         0;
   }
 

@@ -52,12 +52,21 @@ class PageConfiguration {
   RoutePage<T?> toPage<T extends Object?>() {
     return RoutePage<T>(this);
   }
+
+  LocalKey generateRouteKey() {
+    LocalKey key = this.key;
+    if (key is ValueKey) {
+      return ValueKey('$path/$key');
+    }
+
+    return key;
+  }
 }
 
 class RoutePage<T> extends Page<T> {
   RoutePage(this.pageConfiguration)
       : super(
-          key: pageConfiguration.key,
+          key: pageConfiguration.generateRouteKey(),
           name: pageConfiguration.path,
           arguments: pageConfiguration,
         );
