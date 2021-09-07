@@ -174,21 +174,24 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
     updateWidgetIfNeed(page);
 
+    RoutePage<T?>? oldRoutePage = findOldRoutePage(page);
+
     switch (pageState) {
       case PageState.replace:
         pages.removeLast();
-        return page;
+        return oldRoutePage ?? page;
       case PageState.clearStack:
         pages.clear();
-        return page;
+        return oldRoutePage ?? page;
       case PageState.popOnTop:
-        return _popOnTop(page);
+        _popOnTop(page);
+        return oldRoutePage ?? page;
       default:
-        return page;
+        return oldRoutePage ?? page;
     }
   }
 
-  RoutePage<T?> _popOnTop<T extends Object?>(RoutePage<T?> page) {
+  _popOnTop<T extends Object?>(RoutePage<T?> page) {
     final int index = pages.lastIndexWhere((RoutePage<dynamic> e) =>
         e.pageConfiguration.path == page.pageConfiguration.path);
 
@@ -198,8 +201,12 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     } else if (index == 0) {
       pages.clear();
     }
+  }
 
-    return page;
+  RoutePage<T?>? findOldRoutePage<T extends Object?>(RoutePage<T?> page) {
+    return pages
+        .whereType<RoutePage<T?>>()
+        .singleWhereOrNull((RoutePage<T?> element) => element.key == page.key);
   }
 
   PageConfiguration _getConfig(Widget child, {PageParameter? pageParameter}) {
