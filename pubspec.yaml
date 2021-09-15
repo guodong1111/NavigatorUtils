@@ -15,7 +15,7 @@ dependencies:
   hl_core:
     git:
       url: https://hl:x1zS_EnuiYeHt-TTgzRF@gitlab.wuren.com/highlight/hl-core.git
-      ref: d47b50b4e8c5a59cf309b77b1d328dc679b2491a
+      ref: 25dd1be33cae1ce36a44cbd45c46fe9fb672c22b
 
 dev_dependencies:
   flutter_test:
