@@ -3,9 +3,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hl_core/common/brightness.dart';
-import 'package:hl_core/common/theme_wrapper.dart';
-import 'package:hl_core/extension/standard.dart';
 import 'package:hl_core/utils/print.dart';
 
 enum PageState { none, replace, clearStack, popOnTop }
@@ -25,12 +22,10 @@ class PageParameter {
       this.fullscreenDialog = false,
       this.maintainState = true,
       this.transitionType = TransitionType.none,
-      this.transition,
-      this.brightness});
+      this.transition});
 
   final PageState? state;
   final bool fullscreenDialog;
-  final Brightness? brightness;
   final bool maintainState;
   final TransitionType transitionType;
   final RouteTransitionsBuilder? transition;
@@ -104,15 +99,7 @@ class RoutePage<T> extends Page<T> {
   Route<T> _createRoute(BuildContext context) {
     final PageParameter pageParameter = pageConfiguration.pageParameter;
 
-    Brightness? brightness = pageParameter.brightness;
-    brightness ??= pageConfiguration.child.let<Brightness>((Widget widget) {
-      return (widget is BrightnessMixin)
-          ? widget.brightness
-          : Theme.of(context).brightness;
-    });
-
-    final Widget child =
-        ThemeWrapper(brightness: brightness, child: pageConfiguration.child);
+    final Widget child = pageConfiguration.child;
 
     final TransitionType transitionType = pageParameter.transitionType;
 

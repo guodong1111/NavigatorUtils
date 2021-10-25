@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hl_core/common/brightness.dart';
 import 'package:hl_core/utils/print.dart';
 
 import 'navigator.dart';
@@ -15,12 +14,8 @@ class NavigatorUtils {
     bool maintainState = true,
     TransitionType transitionType = TransitionType.none,
     RouteTransitionsBuilder? transition,
-    Brightness? brightness,
   }) {
     printD('[Navigator] NavigatorUtils => push');
-    brightness ??= (child is BrightnessMixin)
-        ? child.brightness
-        : Theme.of(context).brightness;
 
     final AppRouterDelegate delegate = AppRouterDelegate.of(context);
 
@@ -29,8 +24,7 @@ class NavigatorUtils {
         fullscreenDialog: fullscreenDialog,
         maintainState: maintainState,
         transitionType: transitionType,
-        transition: transition,
-        brightness: brightness);
+        transition: transition);
 
     return delegate.push(child, pageParameter: pageParameter);
   }
