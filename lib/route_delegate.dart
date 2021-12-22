@@ -79,7 +79,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   Future<void> setRootWidget(Widget rootWidget) async {
     printD('[Navigator] setRootWidget $rootWidget');
-    final PageConfiguration configuration = PageConfiguration(path: PATH_HOME, child: rootWidget);
+    final PageConfiguration configuration = PageConfiguration(path: getPath(rootWidget), child: rootWidget);
     setNewRoutePath(configuration);
   }
 
