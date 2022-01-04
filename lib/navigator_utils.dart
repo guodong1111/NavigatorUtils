@@ -19,7 +19,8 @@ class NavigatorUtils {
 
     final AppRouterDelegate delegate = AppRouterDelegate.of(context);
 
-    if (true == await delegate.pageInterceptor?.interceptor(child)) {
+    Widget? newChild = await delegate.pageInterceptor?.interceptor(child);
+    if (null == newChild) {
       printD('[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
       return;
     }
@@ -31,7 +32,7 @@ class NavigatorUtils {
         transitionType: transitionType,
         transition: transition);
 
-    return delegate.push(child, pageParameter: pageParameter);
+    return delegate.push(newChild, pageParameter: pageParameter);
   }
 
   static bool canPop(BuildContext context) {
