@@ -14,10 +14,15 @@ class NavigatorUtils {
     bool maintainState = true,
     TransitionType transitionType = TransitionType.none,
     RouteTransitionsBuilder? transition,
-  }) {
+  }) async {
     printD('[Navigator] NavigatorUtils => push');
 
     final AppRouterDelegate delegate = AppRouterDelegate.of(context);
+
+    if (true == delegate.pageInterceptor?.interceptor(child)) {
+      printD('[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
+      return;
+    }
 
     final PageParameter pageParameter = PageParameter(
         state: pageState,

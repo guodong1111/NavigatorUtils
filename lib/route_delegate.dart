@@ -6,6 +6,7 @@ import 'package:hl_core/extension/list_ext.dart';
 import 'package:hl_core/extension/standard.dart';
 import 'package:hl_core/utils/print.dart';
 
+import 'interceptor.dart';
 import 'navigator.dart';
 import 'route_page.dart';
 
@@ -17,6 +18,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   AppRouterDelegate({
     this.observers,
     this.stateMapping,
+    this.pageInterceptor,
     this.transitionDelegate = const DefaultTransitionDelegate<dynamic>(),
   }) : navigatorKey = GlobalKey<NavigatorState>();
 
@@ -26,6 +28,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   final List<NavigatorObserver>? observers;
 
+  final PageInterceptor? pageInterceptor;
   final PageStateMapping? stateMapping;
 
   final List<RoutePage<dynamic>> pages = <RoutePage<dynamic>>[];
