@@ -19,7 +19,7 @@ class NavigatorUtils {
 
     final AppRouterDelegate delegate = AppRouterDelegate.of(context);
 
-    if (true == delegate.pageInterceptor?.interceptor(child)) {
+    if (true == await delegate.pageInterceptor?.interceptor(child)) {
       printD('[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
       return;
     }
