@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hl_core/utils/print.dart';
 
+import 'interceptor.dart';
 import 'navigator.dart';
 
 class NavigatorUtils {
@@ -19,10 +20,14 @@ class NavigatorUtils {
 
     final AppRouterDelegate delegate = AppRouterDelegate.of(context);
 
-    Widget? newChild = await delegate.pageInterceptor?.interceptor(context, child);
-    if (null == newChild) {
-      printD('[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
-      return;
+    PageInterceptor? interceptor = delegate.pageInterceptor;
+    if (null != interceptor) {
+      Widget? newChild = await interceptor.interceptor(context, child);
+      if (null == newChild) {
+        printD('[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
+        return;
+      }
+      child = newChild;
     }
 
     final PageParameter pageParameter = PageParameter(
@@ -32,7 +37,7 @@ class NavigatorUtils {
         transitionType: transitionType,
         transition: transition);
 
-    return delegate.push(newChild, pageParameter: pageParameter);
+    return delegate.push(child, pageParameter: pageParameter);
   }
 
   static bool canPop(BuildContext context) {
