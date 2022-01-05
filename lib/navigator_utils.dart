@@ -19,7 +19,7 @@ class NavigatorUtils {
 
     final AppRouterDelegate delegate = AppRouterDelegate.of(context);
 
-    Widget? newChild = await delegate.pageInterceptor?.interceptor(child);
+    Widget? newChild = await delegate.pageInterceptor?.interceptor(context, child);
     if (null == newChild) {
       printD('[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
       return;
