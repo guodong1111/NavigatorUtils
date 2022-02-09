@@ -37,7 +37,13 @@ class NavigatorUtils {
         transitionType: transitionType,
         transition: transition);
 
-    return delegate.push(child, pageParameter: pageParameter);
+    Object? result = await delegate.push(child, pageParameter: pageParameter);
+
+    if (null != interceptor) {
+      await interceptor.afterInterceptor(context, child);
+    }
+
+    return result;
   }
 
   static bool canPop(BuildContext context) {
