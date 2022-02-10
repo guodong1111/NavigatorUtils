@@ -37,7 +37,7 @@ class NavigatorUtils {
         transitionType: transitionType,
         transition: transition);
 
-    Object? result = await delegate.push(child, pageParameter: pageParameter);
+    dynamic result = await delegate.push(child, pageParameter: pageParameter);
 
     if (null != interceptor) {
       await interceptor.afterInterceptor(context, child);
