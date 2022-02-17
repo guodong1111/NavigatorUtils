@@ -80,6 +80,12 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     return navigator;
   }
 
+  void setPages(List<RoutePage<dynamic>> newPages) {
+    pages..clear()
+        ..addAll(newPages);
+    _updatePages();
+  }
+
   Future<void> setRootWidget(Widget rootWidget) async {
     printD('[Navigator] setRootWidget $rootWidget');
     final PageConfiguration configuration = PageConfiguration(path: getPath(rootWidget), child: rootWidget);
