@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hl_core/base/screen.dart';
@@ -8,7 +7,6 @@ import 'package:hl_core/utils/print.dart';
 
 import 'interceptor.dart';
 import 'navigator.dart';
-import 'route_page.dart';
 
 /// Signature for the [AppRouterDelegate.popUntil] predicate argument.
 typedef PagePredicate = bool Function(RoutePage<dynamic> page);
@@ -135,7 +133,9 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   void pop<T extends Object?>([T? result]) {
     navigatorState?.pop<T>(result);
   }
+
   void mayBePop<T extends Object?>([T? result]) {
+    printD('[Navigator] AppRouterDelegate => mayBePop: $result');
     navigatorState?.maybePop<T>(result);
   }
 
