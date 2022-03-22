@@ -79,8 +79,9 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   void setPages(List<RoutePage<dynamic>> newPages) {
-    pages..clear()
-        ..addAll(newPages);
+    pages
+      ..clear()
+      ..addAll(newPages);
     _updatePages();
   }
 
@@ -166,8 +167,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
         (int index, RoutePage<dynamic>? e) =>
             e != null && index == pages.length - 1);
     while (candidate != null) {
-      if (predicate(candidate))
-        return;
+      if (predicate(candidate)) return;
+
       pop();
       candidate = pages.lastWhereIndexedOrNull(
           (int index, RoutePage<dynamic>? e) =>
@@ -201,8 +202,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   _popOnTop<T extends Object?>(RoutePage<T?> page) {
-    final int index = pages.lastIndexWhere((RoutePage<dynamic> e) =>
-        e.pageConfiguration.path == page.pageConfiguration.path);
+    final int index = pages.indexOf(page);
 
     printD('[Navigator] delegate popOnTop $index');
     if (index > 0) {
