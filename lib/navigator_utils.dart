@@ -16,9 +16,8 @@ class NavigatorUtils {
     TransitionType transitionType = TransitionType.none,
     RouteTransitionsBuilder? transition,
   }) async {
-    printD('[Navigator] NavigatorUtils => push');
-
-    final AppRouterDelegate delegate = currentRouterDelegate ?? AppRouterDelegate.of(context);
+    printI('[Navigator] NavigatorUtils => push');
+    final AppRouterDelegate delegate = _getAppRouterDelegate(context);
 
     PageInterceptor? interceptor = delegate.pageInterceptor;
     if (null != interceptor) {
@@ -47,13 +46,13 @@ class NavigatorUtils {
   }
 
   static bool canPop(BuildContext context) {
-    final AppRouterDelegate delegate = AppRouterDelegate.of(context);
+    final AppRouterDelegate delegate = _getAppRouterDelegate(context);
     return delegate.canPop();
   }
 
   static void pop(BuildContext context, {dynamic result}) {
-    printD('[Navigator] NavigatorUtils => pop');
-    final AppRouterDelegate delegate = AppRouterDelegate.of(context);
+    printI('[Navigator] NavigatorUtils => pop');
+    final AppRouterDelegate delegate = _getAppRouterDelegate(context);
 
     if (canPop(context)) {
       delegate.pop(result);
@@ -62,8 +61,8 @@ class NavigatorUtils {
 
   //pop之后会走进WillPopScope的回调中
   static void mayBePop(BuildContext context, {dynamic result}) {
-    printD('[Navigator] NavigatorUtils => pop');
-    final AppRouterDelegate delegate = AppRouterDelegate.of(context);
+    printI('[Navigator] NavigatorUtils => mayBePop');
+    final AppRouterDelegate delegate = _getAppRouterDelegate(context);
 
     if (canPop(context)) {
       delegate.mayBePop(result);
@@ -71,12 +70,16 @@ class NavigatorUtils {
   }
 
   static Future<bool> handleBackPressed(BuildContext context) async {
-    final AppRouterDelegate delegate = AppRouterDelegate.of(context);
+    final AppRouterDelegate delegate = _getAppRouterDelegate(context);
     return delegate.handleBackPressed();
   }
 
   static Future<bool> handlePushEvent<T>(BuildContext context, T data) async {
-    final AppRouterDelegate delegate = AppRouterDelegate.of(context);
+    final AppRouterDelegate delegate = _getAppRouterDelegate(context);
     return delegate.handlePushEvent(data);
+  }
+
+  static AppRouterDelegate _getAppRouterDelegate(BuildContext context) {
+    return currentRouterDelegate ?? AppRouterDelegate.of(context);
   }
 }
