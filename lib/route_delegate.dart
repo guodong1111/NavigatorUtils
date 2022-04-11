@@ -15,6 +15,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
   AppRouterDelegate({
     this.observers,
+    this.pagePathMapping,
     this.stateMapping,
     this.pageInterceptor,
     this.transitionDelegate = const DefaultTransitionDelegate<dynamic>(),
@@ -26,8 +27,9 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   final List<NavigatorObserver>? observers;
 
-  final PageInterceptor? pageInterceptor;
+  final PagePathMapping? pagePathMapping;
   final PageStateMapping? stateMapping;
+  final PageInterceptor? pageInterceptor;
 
   final List<RoutePage<dynamic>> pages = <RoutePage<dynamic>>[];
 
@@ -231,7 +233,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   String getPath(Widget child) {
-    return '/${child.runtimeType}';
+    return pagePathMapping?.getPath(child) ?? '/${child.runtimeType}';
   }
 
   /// Push the given page onto the navigator.
