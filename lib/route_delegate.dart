@@ -11,6 +11,8 @@ import 'navigator.dart';
 /// Signature for the [AppRouterDelegate.popUntil] predicate argument.
 typedef PagePredicate = bool Function(RoutePage<dynamic> page);
 
+AppRouterDelegate? currentRouterDelegate;
+
 class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
   AppRouterDelegate({
@@ -19,7 +21,9 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     this.stateMapping,
     this.pageInterceptor,
     this.transitionDelegate = const DefaultTransitionDelegate<dynamic>(),
-  }) : navigatorKey = GlobalKey<NavigatorState>();
+  }) : navigatorKey = GlobalKey<NavigatorState>() {
+    currentRouterDelegate = this;
+  }
 
   static const String PATH_HOME = '/';
 

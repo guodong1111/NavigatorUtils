@@ -18,11 +18,11 @@ class NavigatorUtils {
   }) async {
     printD('[Navigator] NavigatorUtils => push');
 
-    final AppRouterDelegate delegate = AppRouterDelegate.of(context);
+    final AppRouterDelegate delegate = currentRouterDelegate ?? AppRouterDelegate.of(context);
 
     PageInterceptor? interceptor = delegate.pageInterceptor;
     if (null != interceptor) {
-      Widget? newChild = await interceptor.interceptor(context, child);
+      Widget? newChild = await interceptor.interceptor(child);
       if (null == newChild) {
         printD('[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
         return;
@@ -40,7 +40,7 @@ class NavigatorUtils {
     dynamic result = await delegate.push(child, pageParameter: pageParameter);
 
     if (null != interceptor) {
-      await interceptor.afterInterceptor(context, child);
+      await interceptor.afterInterceptor(child);
     }
 
     return result;
