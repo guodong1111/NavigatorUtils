@@ -36,12 +36,13 @@ class PageConfiguration {
       {LocalKey? key,
       required this.path,
       required this.child,
-      this.pageParameter = const PageParameter()}) {
-    final Key? childKey = child.key;
-    key = (childKey is LocalKey) ? childKey : ObjectKey(child);
-  }
+      this.pageParameter = const PageParameter()})
+      : key = key ??
+            ((child.key is LocalKey)
+                ? child.key as LocalKey
+                : ObjectKey(child));
 
-  late final LocalKey key;
+  final LocalKey key;
   final String path;
   final Widget child;
   final PageParameter pageParameter;
