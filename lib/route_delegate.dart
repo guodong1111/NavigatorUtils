@@ -225,9 +225,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   PageConfiguration _getConfig(Widget child, {PageParameter? pageParameter}) {
-    final Key? childKey = child.key;
     final PageConfiguration configuration = PageConfiguration(
-      key: (childKey is LocalKey) ? childKey : null,
       path: getPath(child),
       child: child,
       pageParameter: pageParameter ?? const PageParameter(),
