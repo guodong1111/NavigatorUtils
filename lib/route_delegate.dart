@@ -7,6 +7,7 @@ import 'package:hl_core/utils/print.dart';
 
 import 'interceptor.dart';
 import 'navigator.dart';
+import 'page_observer.dart';
 
 /// Signature for the [AppRouterDelegate.popUntil] predicate argument.
 typedef PagePredicate = bool Function(RoutePage<dynamic> page);
@@ -17,6 +18,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
   AppRouterDelegate({
     this.observers,
+    this.pageObserver,
     this.pagePathMapping,
     this.stateMapping,
     this.pageInterceptor,
@@ -31,6 +33,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   final List<NavigatorObserver>? observers;
 
+  final PageObserver? pageObserver;
   final PagePathMapping? pagePathMapping;
   final PageStateMapping? stateMapping;
   final PageInterceptor? pageInterceptor;

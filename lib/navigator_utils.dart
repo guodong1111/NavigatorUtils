@@ -71,6 +71,7 @@ class NavigatorUtils {
       child = newChild;
     }
 
+    delegate.pageObserver?.onPagePush(context, child);
     T? result = await block(delegate);
 
     if (null != interceptor) {
