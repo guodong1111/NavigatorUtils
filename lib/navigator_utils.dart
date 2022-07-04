@@ -6,7 +6,7 @@ import 'navigator.dart';
 
 class NavigatorUtils {
 
-  static Future<dynamic> push(
+  static Future<T?> push<T>(
     BuildContext context,
     Widget child, {
     PageState? pageState,
@@ -15,7 +15,7 @@ class NavigatorUtils {
     TransitionType transitionType = TransitionType.none,
     RouteTransitionsBuilder? transition,
   }) {
-    return _push(
+    return _push<T>(
       context,
       child,
       block: (delegate) {
@@ -26,33 +26,37 @@ class NavigatorUtils {
             transitionType: transitionType,
             transition: transition);
 
-        return delegate.push(child, pageParameter: pageParameter);
+        return delegate.push<T>(child, pageParameter: pageParameter);
       },
     );
   }
 
-  static Future<dynamic> pushModalBottomSheet(
+  static Future<T?> pushModalBottomSheet<T>(
     BuildContext context,
-    Widget child,
-  ) {
-    return _push(
+    Widget child, {
+    Color? backgroundColor,
+    bool isScrollControlled = false,
+        bool useRootNavigator = false,
+  }) {
+    return _push<T>(
       context,
       child,
       block: (_) {
-        return showModalBottomSheet(
+        return showModalBottomSheet<T>(
           context: context,
-          backgroundColor: Colors.transparent,
-          isScrollControlled: true,
+          backgroundColor: backgroundColor ?? Colors.transparent,
+          isScrollControlled: isScrollControlled,
+          useRootNavigator: useRootNavigator,
           builder: (context) => child,
         );
       },
     );
   }
 
-  static Future<dynamic> _push(
+  static Future<T?> _push<T>(
     BuildContext context,
     Widget child, {
-    required dynamic Function(AppRouterDelegate delegate) block,
+    required Future<T?> Function(AppRouterDelegate delegate) block,
   }) async {
     printI('[Navigator] NavigatorUtils => push');
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
@@ -62,12 +66,12 @@ class NavigatorUtils {
       Widget? newChild = await interceptor.interceptor(child);
       if (null == newChild) {
         printD('[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
-        return;
+        return null;
       }
       child = newChild;
     }
 
-    dynamic result = await block(delegate);
+    T? result = await block(delegate);
 
     if (null != interceptor) {
       await interceptor.afterInterceptor(child);
