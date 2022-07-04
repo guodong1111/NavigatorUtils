@@ -36,7 +36,7 @@ class NavigatorUtils {
     Widget child, {
     Color? backgroundColor,
     bool isScrollControlled = false,
-        bool useRootNavigator = false,
+    bool useRootNavigator = false,
   }) {
     return _push<T>(
       context,
