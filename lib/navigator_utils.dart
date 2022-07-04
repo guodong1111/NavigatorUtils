@@ -63,7 +63,7 @@ class NavigatorUtils {
 
     PageInterceptor? interceptor = delegate.pageInterceptor;
     if (null != interceptor) {
-      Widget? newChild = await interceptor.interceptor(child);
+      Widget? newChild = await interceptor.interceptor(context, child);
       if (null == newChild) {
         printD('[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
         return null;
@@ -75,7 +75,7 @@ class NavigatorUtils {
     T? result = await block(delegate);
 
     if (null != interceptor) {
-      await interceptor.afterInterceptor(child);
+      await interceptor.afterInterceptor(context, child);
     }
 
     return result;
