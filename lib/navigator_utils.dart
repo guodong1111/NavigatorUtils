@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hl_core/utils/print.dart';
 
@@ -15,6 +14,45 @@ class NavigatorUtils {
     bool maintainState = true,
     TransitionType transitionType = TransitionType.none,
     RouteTransitionsBuilder? transition,
+  }) {
+    return _push(
+      context,
+      child,
+      block: (delegate) {
+        final PageParameter pageParameter = PageParameter(
+            state: pageState,
+            fullscreenDialog: fullscreenDialog,
+            maintainState: maintainState,
+            transitionType: transitionType,
+            transition: transition);
+
+        return delegate.push(child, pageParameter: pageParameter);
+      },
+    );
+  }
+
+  static Future<dynamic> pushModalBottomSheet(
+    BuildContext context,
+    Widget child,
+  ) {
+    return _push(
+      context,
+      child,
+      block: (_) {
+        return showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          builder: (context) => child,
+        );
+      },
+    );
+  }
+
+  static Future<dynamic> _push(
+    BuildContext context,
+    Widget child, {
+    required dynamic Function(AppRouterDelegate delegate) block,
   }) async {
     printI('[Navigator] NavigatorUtils => push');
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
@@ -29,14 +67,7 @@ class NavigatorUtils {
       child = newChild;
     }
 
-    final PageParameter pageParameter = PageParameter(
-        state: pageState,
-        fullscreenDialog: fullscreenDialog,
-        maintainState: maintainState,
-        transitionType: transitionType,
-        transition: transition);
-
-    dynamic result = await delegate.push(child, pageParameter: pageParameter);
+    dynamic result = await block(delegate);
 
     if (null != interceptor) {
       await interceptor.afterInterceptor(child);
