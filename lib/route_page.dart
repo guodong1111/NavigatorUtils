@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hl_core/utils/print.dart';
 
 enum PageState { none, replace, clearStack, popOnTop }
@@ -75,8 +73,8 @@ class RoutePage<T> extends Page<T> {
   ///
   /// The future completes with the value given to [Navigator.pop], if any, or
   /// else the value of [null].
-  Future<T> get popped => _popCompleter.future;
-  final Completer<T> _popCompleter = Completer<T>();
+  Future<T?> get popped => _popCompleter.future;
+  final Completer<T?> _popCompleter = Completer<T?>();
 
   bool get isCompleted => _popCompleter.isCompleted;
 
