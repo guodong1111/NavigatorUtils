@@ -109,7 +109,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
     pages
       ..clear()
-      ..add(configuration.toPage());
+      ..add(configuration.toPage<Object?>());
   }
 
   bool isExist(Widget child) {
