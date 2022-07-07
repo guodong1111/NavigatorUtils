@@ -126,7 +126,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     printD(
         '[Navigator] AppRouterDelegate => push, pageParameter: $pageParameter');
     RoutePage<T?> page =
-        _getConfig(routeWidget, pageParameter: pageParameter).toPage();
+        _getConfig(routeWidget, pageParameter: pageParameter).toPage<T>();
     page = _navigatePage(page);
     return _pushAndUpdate(page);
   }
