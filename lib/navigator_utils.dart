@@ -5,7 +5,6 @@ import 'interceptor.dart';
 import 'navigator.dart';
 
 class NavigatorUtils {
-
   static Future<T?> push<T>(
     BuildContext context,
     Widget child, {
@@ -53,6 +52,36 @@ class NavigatorUtils {
     );
   }
 
+  static Future<T?> pushDialog<T>(
+    BuildContext context,
+    Widget child, {
+    bool barrierDismissible = true,
+    Color? barrierColor,
+    String? barrierLabel,
+    bool useSafeArea = true,
+    bool useRootNavigator = true,
+    RouteSettings? routeSettings,
+    Offset? anchorPoint,
+  }) {
+    return _push<T>(
+      context,
+      child,
+      block: (_) {
+        return showDialog<T>(
+          context: context,
+          builder: (context) => child,
+          barrierDismissible: barrierDismissible,
+          barrierColor: barrierColor,
+          barrierLabel: barrierLabel,
+          useSafeArea: useSafeArea,
+          useRootNavigator: useRootNavigator,
+          routeSettings: routeSettings,
+          anchorPoint: anchorPoint,
+        );
+      },
+    );
+  }
+
   static Future<T?> _push<T>(
     BuildContext context,
     Widget child, {
@@ -65,7 +94,8 @@ class NavigatorUtils {
     if (null != interceptor) {
       Widget? newChild = await interceptor.interceptor(context, child);
       if (null == newChild) {
-        printD('[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
+        printD(
+            '[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
         return null;
       }
       child = newChild;
