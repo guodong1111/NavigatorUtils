@@ -61,7 +61,6 @@ class NavigatorUtils {
     bool useSafeArea = true,
     bool useRootNavigator = true,
     RouteSettings? routeSettings,
-    Offset? anchorPoint,
   }) {
     return _push<T>(
       context,
@@ -76,7 +75,6 @@ class NavigatorUtils {
           useSafeArea: useSafeArea,
           useRootNavigator: useRootNavigator,
           routeSettings: routeSettings,
-          anchorPoint: anchorPoint,
         );
       },
     );

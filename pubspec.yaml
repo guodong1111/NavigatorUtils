@@ -15,11 +15,7 @@ dependencies:
   hl_core:
     git:
       url: https://hl:x1zS_EnuiYeHt-TTgzRF@gitlab.wuren.com/highlight/hl-core.git
-      ref: 0753c1ac4c50e4f0dce544bbf0c1dd803dc99b3e
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+      ref: 24347806e9aa7a2460a0cc5e269701f62962411e
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
