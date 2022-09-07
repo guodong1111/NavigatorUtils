@@ -141,7 +141,7 @@ class NavigatorUtils {
 
   static Widget? getPreviousPage(BuildContext context) {
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
-    return delegate.pages.getOrNull(delegate.pages.length - 1)?.pageConfiguration.child;
+    return delegate.pages.getOrNull(delegate.pages.length - 2)?.pageConfiguration.child;
   }
 
   static Future<bool> handleBackPressed(BuildContext context) async {
