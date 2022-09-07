@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hl_core/hl_core.dart';
 import 'package:hl_core/utils/print.dart';
 
 import 'interceptor.dart';
@@ -136,6 +137,11 @@ class NavigatorUtils {
   static Widget getCurrentPage(BuildContext context) {
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
     return delegate.pages.last.pageConfiguration.child;
+  }
+
+  static Widget? getPreviousPage(BuildContext context) {
+    final AppRouterDelegate delegate = _getAppRouterDelegate(context);
+    return delegate.pages.getOrNull(delegate.pages.length - 1)?.pageConfiguration.child;
   }
 
   static Future<bool> handleBackPressed(BuildContext context) async {
