@@ -15,7 +15,7 @@ dependencies:
   hl_core:
     git:
       url: https://hl:x1zS_EnuiYeHt-TTgzRF@gitlab.wuren.com/highlight/hl-core.git
-      ref: 24347806e9aa7a2460a0cc5e269701f62962411e
+      ref: eb19bf52906a688e51fc95f1f74389c07c83a1ad
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
