@@ -6,6 +6,8 @@ import 'interceptor.dart';
 import 'navigator.dart';
 
 class NavigatorUtils {
+  static _PushType? _currentType;
+
   static Future<T?> push<T>(
     BuildContext context,
     Widget child, {
@@ -15,6 +17,7 @@ class NavigatorUtils {
     TransitionType transitionType = TransitionType.none,
     RouteTransitionsBuilder? transition,
   }) {
+    _beforePush(_PushType.SCREEN);
     return _push<T>(
       context,
       child,
@@ -28,7 +31,7 @@ class NavigatorUtils {
 
         return delegate.push<T>(child, pageParameter: pageParameter);
       },
-    );
+    ).then(_afterPush);
   }
 
   static Future<T?> pushModalBottomSheet<T>(
@@ -38,6 +41,7 @@ class NavigatorUtils {
     bool isScrollControlled = false,
     bool useRootNavigator = false,
   }) {
+    _beforePush(_PushType.BOTTOM_SHEET);
     return _push<T>(
       context,
       child,
@@ -50,7 +54,7 @@ class NavigatorUtils {
           builder: (context) => child,
         );
       },
-    );
+    ).then(_afterPush);
   }
 
   static Future<T?> pushDialog<T>(
@@ -63,6 +67,12 @@ class NavigatorUtils {
     bool useRootNavigator = true,
     RouteSettings? routeSettings,
   }) {
+    if (_PushType.DIALOG == _currentType) {
+      printW('[NavigatorUtils] Cannot display two dialogs at the same time');
+      return Future.value();
+    }
+
+    _beforePush(_PushType.DIALOG);
     return _push<T>(
       context,
       child,
@@ -78,7 +88,7 @@ class NavigatorUtils {
           routeSettings: routeSettings,
         );
       },
-    );
+    ).then(_afterPush);
   }
 
   static Future<T?> _push<T>(
@@ -141,7 +151,10 @@ class NavigatorUtils {
 
   static Widget? getPreviousPage(BuildContext context) {
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
-    return delegate.pages.getOrNull(delegate.pages.length - 2)?.pageConfiguration.child;
+    return delegate.pages
+        .getOrNull(delegate.pages.length - 2)
+        ?.pageConfiguration
+        .child;
   }
 
   static Future<bool> handleBackPressed(BuildContext context) async {
@@ -157,4 +170,19 @@ class NavigatorUtils {
   static AppRouterDelegate _getAppRouterDelegate(BuildContext context) {
     return currentRouterDelegate ?? AppRouterDelegate.of(context);
   }
+
+  static void _beforePush(_PushType type) {
+    _currentType = type;
+  }
+
+  static T _afterPush<T>(T result) {
+    _currentType = null;
+    return result;
+  }
+}
+
+enum _PushType {
+  SCREEN,
+  DIALOG,
+  BOTTOM_SHEET,
 }
