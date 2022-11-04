@@ -11,6 +11,7 @@ enum TransitionType {
   inFromRight,
   inFromBottom,
   fadeIn,
+  noTransition,
   custom
 }
 
@@ -27,6 +28,14 @@ class PageParameter {
   final bool maintainState;
   final TransitionType transitionType;
   final RouteTransitionsBuilder? transition;
+}
+
+class PageMatchList{
+  final List<PageConfiguration> _configurations;
+
+  PageMatchList(this._configurations);
+
+  List<PageConfiguration> get configurations => _configurations;
 }
 
 class PageConfiguration {
@@ -138,7 +147,9 @@ class RoutePage<T> extends Page<T> {
   RouteTransitionsBuilder _transitionsBuilder(TransitionType transitionType) {
     return (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
-      if (transitionType == TransitionType.fadeIn) {
+      if (transitionType == TransitionType.noTransition) {
+        return child;
+      }else if (transitionType == TransitionType.fadeIn) {
         return FadeTransition(opacity: animation, child: child);
       } else {
         const Offset topLeft = Offset(0.0, 0.0);
