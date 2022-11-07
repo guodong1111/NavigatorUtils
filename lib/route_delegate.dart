@@ -17,13 +17,14 @@ AppRouterDelegate? currentRouterDelegate;
 class AppRouterDelegate extends RouterDelegate<PageMatchList>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageMatchList> {
   AppRouterDelegate({
+    GlobalKey<NavigatorState>? navigatorKey,
     this.observers,
     this.pageObserver,
     this.pagePathMapping,
     this.stateMapping,
     this.pageInterceptor,
     this.transitionDelegate = const DefaultTransitionDelegate<dynamic>(),
-  }) : navigatorKey = GlobalKey<NavigatorState>() {
+  }) : this.navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>() {
     currentRouterDelegate = this;
   }
 
