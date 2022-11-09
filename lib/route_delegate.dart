@@ -14,8 +14,8 @@ typedef PagePredicate = bool Function(RoutePage<dynamic> page);
 
 AppRouterDelegate? currentRouterDelegate;
 
-class AppRouterDelegate extends RouterDelegate<PageMatchList>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageMatchList> {
+class AppRouterDelegate extends RouterDelegate<PageConfiguration>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
   AppRouterDelegate({
     GlobalKey<NavigatorState>? navigatorKey,
     this.observers,
@@ -47,9 +47,8 @@ class AppRouterDelegate extends RouterDelegate<PageMatchList>
   NavigatorState? get navigatorState => navigatorKey.currentState;
 
   @override
-  PageMatchList? get currentConfiguration => pages.isNotEmpty
-      ? PageMatchList(pages.map((e) => e.pageConfiguration).toList())
-      : null;
+  PageConfiguration? get currentConfiguration =>
+      pages.isNotEmpty ? pages.last.pageConfiguration : null;
 
   static AppRouterDelegate of(BuildContext context) {
     final RouterDelegate<dynamic> delegate = Router.of(context).routerDelegate;
@@ -98,30 +97,20 @@ class AppRouterDelegate extends RouterDelegate<PageMatchList>
 
   Future<void> setRootWidget(Widget rootWidget) async {
     printD('[Navigator] setRootWidget $rootWidget');
-    final PageMatchList pageMatchList = PageMatchList(
-        [PageConfiguration(path: getPath(rootWidget), child: rootWidget)]);
-    setNewRoutePath(pageMatchList);
-  }
-
-  Future<void> setRootWidgets(List<Widget> rootWidgets) async {
-    printD('[Navigator] setRootWidgets $rootWidgets');
-    final PageMatchList pageMatchList = PageMatchList(rootWidgets
-        .map((e) => PageConfiguration(path: getPath(e), child: e))
-        .toList());
-    setNewRoutePath(pageMatchList);
+    final PageConfiguration configuration = PageConfiguration(path: getPath(rootWidget), child: rootWidget);
+    setNewRoutePath(configuration);
   }
 
   @override
-  Future<void> setNewRoutePath(PageMatchList pageMatchList) async {
-    printD(
-        '[Navigator] setNewRoutePath ${pageMatchList.configurations.map((e) => e.path).join()}');
+  Future<void> setNewRoutePath(PageConfiguration configuration) async {
+    printD('[Navigator] setNewRoutePath ${configuration.path}');
     if (pages.isNotEmpty) {
       return;
     }
 
     pages
       ..clear()
-      ..addAll(pageMatchList.configurations.map((e) => e.toPage<dynamic>()));
+      ..add(configuration.toPage<dynamic>());
   }
 
   bool isExist(Widget child) {
