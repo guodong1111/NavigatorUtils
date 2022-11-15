@@ -248,10 +248,12 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     RoutePage<T?> page,
   ) {
     if (pages.contains(page)) {
-      throw Exception(
-          '${page.name}${page.key} was already exists in the pages, '
-          'please change the key or PageState. '
-          'Ensure that your keys do not exist at the same time.');
+      if (null != page.key) {
+        throw Exception(
+            '${page.name}${page.key} was already exists in the pages, '
+                'please change the key or PageState. '
+                'Ensure that your keys do not exist at the same time.');
+      }
     }
 
     pages.add(page);
