@@ -226,7 +226,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   RoutePage<T?>? findOldRoutePage<T extends Object?>(RoutePage<T?> page) {
     return pages
         .whereType<RoutePage<T?>>()
-        .singleWhereOrNull((RoutePage<T?> element) => element.key == page.key);
+        .singleWhereOrNull((RoutePage<T?> element) => element == page);
   }
 
   PageConfiguration _getConfig(Widget child, {PageParameter? pageParameter}) {
