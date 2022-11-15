@@ -97,7 +97,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   Future<void> setRootWidget(Widget rootWidget) async {
     printD('[Navigator] setRootWidget $rootWidget');
-    final PageConfiguration configuration = PageConfiguration(path: getPath(rootWidget), child: rootWidget);
+    final PageConfiguration configuration =
+        PageConfiguration(path: getPath(rootWidget), child: rootWidget);
     setNewRoutePath(configuration);
   }
 
@@ -277,8 +278,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
       return false;
     }
 
-    return await oldWidget.events[ScreenEvent.update]?.run(newWidget) ??
-        false;
+    return await oldWidget.events[ScreenEvent.update]?.run(newWidget) ?? false;
   }
 
   Future<bool> handleBackPressed() async {
