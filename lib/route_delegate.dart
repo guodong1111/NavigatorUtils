@@ -208,7 +208,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
         _popOnTop(page);
         return oldRoutePage ?? page;
       default:
-        return oldRoutePage ?? page;
+        return page;
     }
   }
 
@@ -224,10 +224,6 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   RoutePage<T?>? findOldRoutePage<T extends Object?>(RoutePage<T?> page) {
-    if (null == page.key) {
-      return null;
-    }
-
     return pages
         .whereType<RoutePage<T?>>()
         .singleWhereOrNull((RoutePage<T?> element) => element == page);
