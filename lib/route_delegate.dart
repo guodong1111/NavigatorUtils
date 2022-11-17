@@ -194,8 +194,6 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
         stateMapping?.getState(child, isExist) ??
         PageState.none;
 
-    updateWidgetIfNeed(page);
-
     RoutePage<T?>? oldRoutePage = findOldRoutePage(page);
 
     switch (pageState) {
@@ -206,6 +204,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
         pages.clear();
         return oldRoutePage ?? page;
       case PageState.popOnTop:
+        updateWidgetIfNeed(page);
         _popOnTop(page);
         return oldRoutePage ?? page;
       default:
@@ -274,7 +273,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   Future<bool> updateWidgetIfNeed<T>(RoutePage<T?> page) async {
     final RoutePage? oldRoutePage = pages
         .whereType<RoutePage<T?>>()
-        .singleWhereOrNull((element) => element.key == page.key);
+        .singleWhereOrNull((element) => element == page);
     final Widget? oldWidget = oldRoutePage?.pageConfiguration.child;
     if (oldWidget is! Screen) {
       return false;
