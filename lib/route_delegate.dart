@@ -59,9 +59,9 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   @override
   Widget build(BuildContext context) {
     printD(
-        '[Navigator] delegate path ${pages.map((RoutePage<dynamic> e) => e.pageConfiguration.path).toList()}');
+        '[Navigator] delegate path: ${pages.map((RoutePage<dynamic> e) => e.pageConfiguration.path).toList()}');
     printD(
-        '[Navigator] delegate ${pages.map((RoutePage<dynamic> e) => e.pageConfiguration.key).toList()}');
+        '[Navigator] delegate key: ${pages.map((RoutePage<dynamic> e) => e.pageConfiguration.key).toList()}');
     if (pages.isEmpty) {
       return Container();
     }
@@ -119,6 +119,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     final String path = getPath(child);
     return pages.indexWhere((RoutePage<dynamic> element) =>
             element.pageConfiguration.path == path &&
+            null != key &&
             element.pageConfiguration.key == key) >=
         0;
   }
@@ -251,8 +252,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
       if (null != page.key) {
         throw Exception(
             '${page.name}${page.key} was already exists in the pages, '
-                'please change the key or PageState. '
-                'Ensure that your keys do not exist at the same time.');
+            'please change the key or PageState. '
+            'Ensure that your keys do not exist at the same time.');
       }
     }
 
