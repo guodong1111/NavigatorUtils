@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hl_core/hl_core.dart';
-import 'package:hl_core/utils/print.dart';
+import 'package:navigator_utils/extension/list_ext.dart';
 
 import 'interceptor.dart';
 import 'navigator.dart';
@@ -86,14 +85,14 @@ class NavigatorUtils {
     Widget child, {
     required Future<T?> Function(AppRouterDelegate delegate) block,
   }) async {
-    printI('[Navigator] NavigatorUtils => push');
+    print('[Navigator] NavigatorUtils => push');
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
 
     PageInterceptor? interceptor = delegate.pageInterceptor;
     if (null != interceptor) {
       Widget? newChild = await interceptor.interceptor(context, child);
       if (null == newChild) {
-        printD(
+        print(
             '[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
         return null;
       }
@@ -116,7 +115,7 @@ class NavigatorUtils {
   }
 
   static void pop(BuildContext context, {dynamic result}) {
-    printI('[Navigator] NavigatorUtils => pop');
+    print('[Navigator] NavigatorUtils => pop');
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
 
     if (canPop(context)) {
@@ -126,7 +125,7 @@ class NavigatorUtils {
 
   //pop之后会走进WillPopScope的回调中
   static void mayBePop(BuildContext context, {dynamic result}) {
-    printI('[Navigator] NavigatorUtils => mayBePop');
+    print('[Navigator] NavigatorUtils => mayBePop');
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
 
     if (canPop(context)) {

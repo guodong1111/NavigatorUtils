@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hl_core/base/screen.dart';
-import 'package:hl_core/extension/list_ext.dart';
-import 'package:hl_core/extension/standard.dart';
-import 'package:hl_core/utils/print.dart';
+import 'extension/list_ext.dart';
+import 'extension/standard.dart';
 
+import 'base/screen.dart';
 import 'interceptor.dart';
 import 'navigator.dart';
 import 'page_observer.dart';
@@ -52,16 +51,11 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   static AppRouterDelegate of(BuildContext context) {
     final RouterDelegate<dynamic> delegate = Router.of(context).routerDelegate;
-    assert(delegate is RouterDelegate, 'Delegate type must match');
     return delegate as AppRouterDelegate;
   }
 
   @override
   Widget build(BuildContext context) {
-    printD(
-        '[Navigator] delegate path: ${pages.map((RoutePage<dynamic> e) => e.pageConfiguration.path).toList()}');
-    printD(
-        '[Navigator] delegate key: ${pages.map((RoutePage<dynamic> e) => e.pageConfiguration.key).toList()}');
     if (pages.isEmpty) {
       return Container();
     }
@@ -96,7 +90,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   Future<void> setRootWidget(Widget rootWidget) async {
-    printD('[Navigator] setRootWidget $rootWidget');
+    print('[Navigator] setRootWidget $rootWidget');
     final PageConfiguration configuration =
         PageConfiguration(path: getPath(rootWidget), child: rootWidget);
     setNewRoutePath(configuration);
@@ -104,7 +98,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   @override
   Future<void> setNewRoutePath(PageConfiguration configuration) async {
-    printD('[Navigator] setNewRoutePath ${configuration.path}');
+    print('[Navigator] setNewRoutePath ${configuration.path}');
     if (pages.isNotEmpty) {
       return;
     }
@@ -126,7 +120,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   Future<T?> push<T extends Object?>(Widget routeWidget,
       {Map<String, dynamic>? arguments, PageParameter? pageParameter}) {
-    printD(
+    print(
         '[Navigator] AppRouterDelegate => push, pageParameter: $pageParameter');
     RoutePage<T?> page =
         _getConfig(routeWidget, pageParameter: pageParameter).toPage<T>();
@@ -136,7 +130,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   @override
   Future<bool> popRoute() async {
-    printD('[Navigator] AppRouterDelegate => popRoute');
+    print('[Navigator] AppRouterDelegate => popRoute');
     return super.popRoute();
   }
 
@@ -148,7 +142,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   void mayBePop<T extends Object?>([T? result]) {
-    printD('[Navigator] AppRouterDelegate => mayBePop: $result');
+    print('[Navigator] AppRouterDelegate => mayBePop: $result');
     navigatorState?.maybePop<T>(result);
   }
 
@@ -215,7 +209,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   _popOnTop<T extends Object?>(RoutePage<T?> page) {
     final int index = pages.indexOf(page);
 
-    printD('[Navigator] delegate popOnTop $index');
+    print('[Navigator] delegate popOnTop $index');
     if (index > 0) {
       pages.removeRange(index, pages.length);
     } else if (index == 0) {

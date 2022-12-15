@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hl_core/utils/print.dart';
 
 enum PageState { none, replace, clearStack, popOnTop }
 
@@ -108,7 +107,7 @@ class RoutePage<T> extends Page<T> {
                   pageParameter.transition != null) ||
               transitionType != TransitionType.custom,
           'transitionsBuilder not set');
-      printD('[Navigator] transition routePage $transitionType');
+      print('[Navigator] transition routePage $transitionType');
 
       return PageRouteBuilder<T>(
         settings: this,

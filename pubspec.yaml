@@ -1,21 +1,15 @@
 name: navigator_utils
-description: A new Flutter project.
-version: 0.0.1
-
-publish_to: 'none'
+description: A tool that is convenient to use Widget to jump pages directly.
+version: 1.0.0
+homepage: https://github.com/guodong1111/NavigatorUtils
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
-
-  hl_core:
-    git:
-      url: https://hl:x1zS_EnuiYeHt-TTgzRF@gitlab.wuren.com/highlight/hl-core.git
-      ref: 0f057b771a6c6e16f0fe41c6c152f1428cf23e55
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

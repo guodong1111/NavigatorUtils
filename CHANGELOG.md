@@ -1,3 +1,4 @@
-## 0.0.1
+# Changelog
 
-* TODO: Describe initial release.
+## [1.0.0] - 2022-12-15
+Release
