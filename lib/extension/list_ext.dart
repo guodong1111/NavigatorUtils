@@ -155,7 +155,6 @@ extension ListExt<T> on List<T> {
       return index;
     }
   }
-
 }
 
 extension DuplicateListExt<T> on List<List<T>> {

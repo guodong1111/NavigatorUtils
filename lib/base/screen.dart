@@ -9,7 +9,6 @@ abstract class Screen extends StatefulWidget {
 }
 
 abstract class ScreenState<T extends Screen> extends State<T> {
-
   @override
   void initState() {
     super.initState();
