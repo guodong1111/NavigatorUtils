@@ -56,7 +56,7 @@ class NavigatorUtils {
     BuildContext context,
     Widget child, {
     bool barrierDismissible = true,
-    Color? barrierColor,
+    Color? barrierColor = Colors.black54,
     String? barrierLabel,
     bool useSafeArea = true,
     bool useRootNavigator = true,
