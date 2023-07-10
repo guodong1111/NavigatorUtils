@@ -196,7 +196,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
         return oldRoutePage ?? page;
       case PageState.clearStack:
         pages.clear();
-        return oldRoutePage ?? page;
+        return page;
       case PageState.popOnTop:
         updateWidgetIfNeed(page);
         _popOnTop(page);
