@@ -35,9 +35,9 @@ class PageConfiguration {
       required this.path,
       required this.child,
       this.pageParameter = const PageParameter()})
-      : key = key ?? ((child.key is LocalKey) ? child.key as LocalKey : null);
+      : key = key ?? ((child.key is LocalKey) ? child.key as LocalKey : ObjectKey(child));
 
-  final LocalKey? key;
+  final LocalKey key;
   final String path;
   final Widget child;
   final PageParameter pageParameter;
@@ -46,8 +46,8 @@ class PageConfiguration {
     return RoutePage<T>(this);
   }
 
-  LocalKey? generateRouteKey() {
-    LocalKey? key = this.key;
+  LocalKey generateRouteKey() {
+    LocalKey key = this.key;
     if (key is ValueKey) {
       return ValueKey('$path/$key');
     }
