@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
-abstract class Screen extends StatefulWidget {
+mixin Screen on StatefulWidget {
   final ScreenEvents events = ScreenEvents();
 
-  Screen({
-    Key? key,
-  }) : super(key: key);
 }
 
-abstract class ScreenState<T extends Screen> extends State<T> {
+mixin ScreenState<T extends Screen> on State<T> {
   @override
   void initState() {
     super.initState();
@@ -27,7 +24,6 @@ abstract class ScreenState<T extends Screen> extends State<T> {
   void initWidgetEvents() {
     widget.events[ScreenEvent.update] = (data) => updateByNewScreen(data as T);
     widget.events[ScreenEvent.backPressed] = (_) => onBackPressed();
-    widget.events[ScreenEvent.pushMessage] = handlePushMessage;
   }
 
   @override
@@ -42,17 +38,12 @@ abstract class ScreenState<T extends Screen> extends State<T> {
   }
 
   // return true means the event has been consumed
-  Future<bool> handlePushMessage(dynamic) async {
-    return false;
-  }
-
-  // return true means the event has been consumed
   Future<bool> onBackPressed() async {
     return false;
   }
 }
 
-enum ScreenEvent { backPressed, pushMessage, update }
+enum ScreenEvent { backPressed, update }
 
 // return true means the event has been consumed
 typedef ScreenEvents = Map<ScreenEvent, Future<bool> Function(dynamic)>;

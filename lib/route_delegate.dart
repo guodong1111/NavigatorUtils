@@ -287,16 +287,6 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
         false;
   }
 
-  Future<bool> handlePushEvent<T>(T data) async {
-    final Widget? currentWidget = getCurrentWidget();
-    if (currentWidget is! Screen) {
-      return false;
-    }
-
-    return await currentWidget.events[ScreenEvent.pushMessage]?.run(data) ??
-        false;
-  }
-
   Widget? getCurrentWidget() {
     return pages.lastOrNull()?.pageConfiguration.child;
   }
