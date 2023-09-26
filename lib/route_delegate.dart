@@ -6,6 +6,7 @@ import 'extension/standard.dart';
 import 'base/screen.dart';
 import 'interceptor.dart';
 import 'navigator.dart';
+import 'dialog_state.dart';
 import 'page_observer.dart';
 
 /// Signature for the [AppRouterDelegate.popUntil] predicate argument.
@@ -39,6 +40,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   final PageInterceptor? pageInterceptor;
 
   final List<RoutePage<dynamic>> pages = <RoutePage<dynamic>>[];
+  late final DialogState dialogState = DialogState(() => pages.lastOrNull());
 
   @override
   final GlobalKey<NavigatorState> navigatorKey;
@@ -77,7 +79,10 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
         }
         return route.didPop(result);
       },
-      observers: <NavigatorObserver>[if (observers != null) ...observers!],
+      observers: <NavigatorObserver>[
+        dialogState,
+        ...?observers,
+      ],
     );
     return navigator;
   }
@@ -288,6 +293,11 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   Widget? getCurrentWidget() {
-    return pages.lastOrNull()?.pageConfiguration.child;
+    final RoutePage<dynamic>? page = pages.lastOrNull();
+    if (dialogState.isDialogShowing(page)) {
+      return null;
+    }
+
+    return page?.pageConfiguration.child;
   }
 }

@@ -52,7 +52,8 @@ class NavigatorUtils {
     return _push<T>(
       context,
       child,
-      block: (_) {
+      block: (delegate) {
+        delegate.dialogState.onPushModalBottomSheet();
         return showModalBottomSheet<T>(
           context: context,
           builder: (context) => child,
@@ -89,7 +90,8 @@ class NavigatorUtils {
     return _push<T>(
       context,
       child,
-      block: (_) {
+      block: (delegate) {
+        delegate.dialogState.onPushDialog();
         return showDialog<T>(
           context: context,
           builder: (context) => child,
