@@ -172,7 +172,12 @@ class NavigatorUtils {
 
   static Future<bool> handleBackPressed(BuildContext context) async {
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
-    return delegate.handleBackPressed();
+
+    if (await delegate.handleBackPressed()) {
+      return true;
+    }
+
+    return delegate.popRoute();
   }
 
   static AppRouterDelegate _getAppRouterDelegate(BuildContext context) {

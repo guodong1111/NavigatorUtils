@@ -1,6 +1,6 @@
 name: navigator_utils
 description: A tool that is convenient to use Widget to jump pages directly.
-version: 1.0.0+8
+version: 1.0.0+9
 homepage: https://github.com/guodong1111/NavigatorUtils
 
 environment:
