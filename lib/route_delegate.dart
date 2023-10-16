@@ -75,6 +75,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
           if (removed != null) {
             pages.remove(removed);
             _updatePages();
+            pageObserver?.onPagePop(context, removed.pageConfiguration.child);
           }
         }
         return route.didPop(result);
