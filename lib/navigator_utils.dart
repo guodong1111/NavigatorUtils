@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:navigator_utils/extension/list_ext.dart';
+import 'package:navigator_utils/extension/_list_ext.dart';
 
 import 'interceptor.dart';
 import 'navigator.dart';
+import 'utils/_lru_cache.dart';
 
 class NavigatorUtils {
+
+  static LRUMap<Widget, dynamic> _resultTemp = LRUMap<Widget, dynamic>(10);
+
   static Future<T?> push<T>(
     BuildContext context,
     Widget child, {
@@ -17,7 +21,7 @@ class NavigatorUtils {
     return _push<T>(
       context,
       child,
-      block: (delegate) {
+      block: (delegate) async {
         final PageParameter pageParameter = PageParameter(
             state: pageState,
             fullscreenDialog: fullscreenDialog,
@@ -25,7 +29,9 @@ class NavigatorUtils {
             transitionType: transitionType,
             transition: transition);
 
-        return delegate.push<T>(child, pageParameter: pageParameter);
+        T? result = await delegate.push<T>(child, pageParameter: pageParameter);
+        result ??= _resultTemp[child];
+        return result;
       },
     );
   }
@@ -52,9 +58,9 @@ class NavigatorUtils {
     return _push<T>(
       context,
       child,
-      block: (delegate) {
+      block: (delegate) async {
         delegate.dialogState.onPushModalBottomSheet();
-        return showModalBottomSheet<T>(
+        T? result = await showModalBottomSheet<T>(
           context: context,
           builder: (context) => child,
           backgroundColor: backgroundColor ?? Colors.transparent,
@@ -73,6 +79,8 @@ class NavigatorUtils {
           transitionAnimationController: transitionAnimationController,
           anchorPoint: anchorPoint,
         );
+        result ??= _resultTemp[child];
+        return result;
       },
     );
   }
@@ -90,9 +98,9 @@ class NavigatorUtils {
     return _push<T>(
       context,
       child,
-      block: (delegate) {
+      block: (delegate) async {
         delegate.dialogState.onPushDialog();
-        return showDialog<T>(
+        T? result = await showDialog<T>(
           context: context,
           builder: (context) => child,
           barrierDismissible: barrierDismissible,
@@ -102,8 +110,14 @@ class NavigatorUtils {
           useRootNavigator: useRootNavigator,
           routeSettings: routeSettings,
         );
+        result ??= _resultTemp[child];
+        return result;
       },
     );
+  }
+
+  static setResult(BuildContext context, dynamic result) {
+    _resultTemp[context.widget] = result;
   }
 
   static Future<T?> _push<T>(
