@@ -6,7 +6,6 @@ import 'navigator.dart';
 import 'utils/_lru_cache.dart';
 
 class NavigatorUtils {
-
   static LRUMap<Widget, dynamic> _resultTemp = LRUMap<Widget, dynamic>(10);
 
   static Future<T?> push<T>(
@@ -59,7 +58,7 @@ class NavigatorUtils {
       context,
       child,
       block: (delegate) async {
-        delegate.dialogState.onPushModalBottomSheet();
+        delegate.dialogState.onPushModalBottomSheet(child);
         T? result = await showModalBottomSheet<T>(
           context: context,
           builder: (context) => child,
@@ -99,7 +98,7 @@ class NavigatorUtils {
       context,
       child,
       block: (delegate) async {
-        delegate.dialogState.onPushDialog();
+        delegate.dialogState.onPushDialog(child);
         T? result = await showDialog<T>(
           context: context,
           builder: (context) => child,
@@ -117,7 +116,20 @@ class NavigatorUtils {
   }
 
   static setResult(BuildContext context, dynamic result) {
-    _resultTemp[context.widget] = result;
+    final AppRouterDelegate delegate = _getAppRouterDelegate(context);
+    Widget? screen = delegate.getCurrentWidget();
+
+    if (screen != context.widget) {
+      context.visitAncestorElements((element) {
+        if (screen == element.widget) {
+          screen = element.widget;
+          return false;
+        }
+
+        return true;
+      });
+    }
+    _resultTemp[screen ?? context.widget] = result;
   }
 
   static Future<T?> _push<T>(

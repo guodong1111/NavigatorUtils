@@ -296,7 +296,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   Widget? getCurrentWidget() {
     final RoutePage<dynamic>? page = pages.lastOrNull();
     if (dialogState.isDialogShowing(page)) {
-      return null;
+      return dialogState.getWidget(page);
     }
 
     return page?.pageConfiguration.child;
