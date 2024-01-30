@@ -20,7 +20,7 @@ class NavigatorUtils {
     return _push<T>(
       context,
       child,
-      block: (delegate) async {
+      block: (delegate, child) async {
         final PageParameter pageParameter = PageParameter(
             state: pageState,
             fullscreenDialog: fullscreenDialog,
@@ -57,7 +57,7 @@ class NavigatorUtils {
     return _push<T>(
       context,
       child,
-      block: (delegate) async {
+      block: (delegate, child) async {
         delegate.dialogState.onPushModalBottomSheet(child);
         T? result = await showModalBottomSheet<T>(
           context: context,
@@ -97,7 +97,7 @@ class NavigatorUtils {
     return _push<T>(
       context,
       child,
-      block: (delegate) async {
+      block: (delegate, child) async {
         delegate.dialogState.onPushDialog(child);
         T? result = await showDialog<T>(
           context: context,
@@ -135,7 +135,7 @@ class NavigatorUtils {
   static Future<T?> _push<T>(
     BuildContext context,
     Widget child, {
-    required Future<T?> Function(AppRouterDelegate delegate) block,
+    required Future<T?> Function(AppRouterDelegate delegate, Widget child) block,
   }) async {
     print('[Navigator] NavigatorUtils => push');
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
@@ -152,7 +152,7 @@ class NavigatorUtils {
     }
 
     delegate.pageObserver?.onPagePush(context, child);
-    T? result = await block(delegate);
+    T? result = await block(delegate, child);
 
     if (null != interceptor) {
       await interceptor.afterInterceptor(context, child);
