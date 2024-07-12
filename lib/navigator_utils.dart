@@ -16,17 +16,22 @@ class NavigatorUtils {
     bool maintainState = true,
     TransitionType transitionType = TransitionType.none,
     RouteTransitionsBuilder? transition,
+    Duration transitionDuration = const Duration(milliseconds: 300),
+    Duration reverseTransitionDuration = const Duration(milliseconds: 300),
   }) {
     return _push<T>(
       context,
       child,
       block: (delegate, child) async {
         final PageParameter pageParameter = PageParameter(
-            state: pageState,
-            fullscreenDialog: fullscreenDialog,
-            maintainState: maintainState,
-            transitionType: transitionType,
-            transition: transition);
+          state: pageState,
+          fullscreenDialog: fullscreenDialog,
+          maintainState: maintainState,
+          transitionType: transitionType,
+          transition: transition,
+          transitionDuration: transitionDuration,
+          reverseTransitionDuration: reverseTransitionDuration,
+        );
 
         T? result = await delegate.push<T>(child, pageParameter: pageParameter);
         result ??= _resultTemp[child];
@@ -135,7 +140,8 @@ class NavigatorUtils {
   static Future<T?> _push<T>(
     BuildContext context,
     Widget child, {
-    required Future<T?> Function(AppRouterDelegate delegate, Widget child) block,
+    required Future<T?> Function(AppRouterDelegate delegate, Widget child)
+        block,
   }) async {
     print('[Navigator] NavigatorUtils => push');
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);

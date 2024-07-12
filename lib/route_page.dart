@@ -15,18 +15,23 @@ enum TransitionType {
 }
 
 class PageParameter {
-  const PageParameter(
-      {this.state,
-      this.fullscreenDialog = false,
-      this.maintainState = true,
-      this.transitionType = TransitionType.none,
-      this.transition});
+  const PageParameter({
+    this.state,
+    this.fullscreenDialog = false,
+    this.maintainState = true,
+    this.transitionType = TransitionType.none,
+    this.transition,
+    this.transitionDuration = const Duration(milliseconds: 300),
+    this.reverseTransitionDuration = const Duration(milliseconds: 300),
+  });
 
   final PageState? state;
   final bool fullscreenDialog;
   final bool maintainState;
   final TransitionType transitionType;
   final RouteTransitionsBuilder? transition;
+  final Duration transitionDuration;
+  final Duration reverseTransitionDuration;
 }
 
 class PageConfiguration {
@@ -35,7 +40,10 @@ class PageConfiguration {
       required this.path,
       required this.child,
       this.pageParameter = const PageParameter()})
-      : key = key ?? ((child.key is LocalKey) ? child.key as LocalKey : ObjectKey(child));
+      : key = key ??
+            ((child.key is LocalKey)
+                ? child.key as LocalKey
+                : ObjectKey(child));
 
   final LocalKey key;
   final String path;
@@ -119,6 +127,8 @@ class RoutePage<T> extends Page<T> {
         transitionsBuilder: transitionType == TransitionType.custom
             ? pageParameter.transition!
             : _transitionsBuilder(transitionType),
+        transitionDuration: pageParameter.transitionDuration,
+        reverseTransitionDuration: pageParameter.reverseTransitionDuration,
       );
     } else {
       return MaterialPageRoute<T>(
