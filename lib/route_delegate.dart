@@ -8,6 +8,7 @@ import 'interceptor.dart';
 import 'navigator.dart';
 import 'dialog_state.dart';
 import 'page_observer.dart';
+import 'widget_wrapper.dart';
 
 /// Signature for the [AppRouterDelegate.popUntil] predicate argument.
 typedef PagePredicate = bool Function(RoutePage<dynamic> page);
@@ -23,6 +24,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     this.pagePathMapping,
     this.stateMapping,
     this.pageInterceptor,
+    this.dialogWrapper,
+    this.bottomSheetWrapper,
     this.transitionDelegate = const DefaultTransitionDelegate<dynamic>(),
   }) : this.navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>() {
     currentRouterDelegate = this;
@@ -38,6 +41,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   final PagePathMapping? pagePathMapping;
   final PageStateMapping? stateMapping;
   final PageInterceptor? pageInterceptor;
+  final WidgetWrapper? dialogWrapper;
+  final WidgetWrapper? bottomSheetWrapper;
 
   final List<RoutePage<dynamic>> pages = <RoutePage<dynamic>>[];
   late final DialogState dialogState = DialogState(() => pages.lastOrNull());

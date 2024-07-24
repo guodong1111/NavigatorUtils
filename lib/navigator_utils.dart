@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:navigator_utils/extension/_list_ext.dart';
+import 'package:navigator_utils/widget_wrapper.dart';
 
 import 'interceptor.dart';
 import 'navigator.dart';
@@ -59,6 +60,10 @@ class NavigatorUtils {
     AnimationController? transitionAnimationController,
     Offset? anchorPoint,
   }) {
+    final WidgetWrapper? widgetWrapper = _getAppRouterDelegate(context).bottomSheetWrapper;
+    if (null != widgetWrapper) {
+      child = widgetWrapper.call(child);
+    }
     return _push<T>(
       context,
       child,
@@ -99,6 +104,10 @@ class NavigatorUtils {
     bool useRootNavigator = true,
     RouteSettings? routeSettings,
   }) {
+    final WidgetWrapper? widgetWrapper = _getAppRouterDelegate(context).dialogWrapper;
+    if (null != widgetWrapper) {
+      child = widgetWrapper.call(child);
+    }
     return _push<T>(
       context,
       child,
