@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'extension/_list_ext.dart';
-import 'extension/_standard.dart';
 
 import 'base/screen.dart';
+import 'dialog_state.dart';
+import 'extension/_list_ext.dart';
+import 'extension/_standard.dart';
 import 'interceptor.dart';
 import 'navigator.dart';
-import 'dialog_state.dart';
 import 'page_observer.dart';
 import 'widget_wrapper.dart';
 
@@ -74,8 +74,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
       onPopPage: (Route<dynamic> route, dynamic result) {
         if (pages.length > 1 && route.settings is RoutePage) {
           final RoutePage<dynamic>? removed = pages.lastWhereIndexedOrNull(
-            (int index, RoutePage<dynamic> element) =>
-                element.name == route.settings.name,
+            (int index, RoutePage<dynamic> element) => element.name == route.settings.name,
           );
           if (removed != null) {
             pages.remove(removed);
@@ -131,10 +130,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   Future<T?> push<T extends Object?>(Widget routeWidget,
       {Map<String, dynamic>? arguments, PageParameter? pageParameter}) {
-    print(
-        '[Navigator] AppRouterDelegate => push, pageParameter: $pageParameter');
-    RoutePage<T?> page =
-        _getConfig(routeWidget, pageParameter: pageParameter).toPage<T>();
+    print('[Navigator] AppRouterDelegate => push, pageParameter: $pageParameter');
+    RoutePage<T?> page = _getConfig(routeWidget, pageParameter: pageParameter).toPage<T>();
     page = _navigatePage(page);
     return _pushAndUpdate(page);
   }
@@ -158,16 +155,12 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   Future<T?> popAndPushWidget<T extends Object?>(Widget routeWidget,
-      {T? result,
-      Map<String, dynamic>? arguments,
-      PageParameter? pageParameter}) {
+      {T? result, Map<String, dynamic>? arguments, PageParameter? pageParameter}) {
     pop<T>(result);
-    return push<T>(routeWidget,
-        arguments: arguments, pageParameter: pageParameter);
+    return push<T>(routeWidget, arguments: arguments, pageParameter: pageParameter);
   }
 
-  Future<T?> popUntilAndPushWidget<T extends Object?>(
-      PagePredicate predicate, Widget routeWidget,
+  Future<T?> popUntilAndPushWidget<T extends Object?>(PagePredicate predicate, Widget routeWidget,
       {Map<String, dynamic>? arguments, PageParameter? pageParameter}) {
     _popUntil(predicate);
     return push<T>(routeWidget, pageParameter: pageParameter);
@@ -181,15 +174,13 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   void _popUntil(PagePredicate predicate) {
     RoutePage<dynamic>? candidate = pages.lastWhereIndexedOrNull(
-        (int index, RoutePage<dynamic>? e) =>
-            e != null && index == pages.length - 1);
+        (int index, RoutePage<dynamic>? e) => e != null && index == pages.length - 1);
     while (candidate != null) {
       if (predicate(candidate)) return;
 
       pop();
       candidate = pages.lastWhereIndexedOrNull(
-          (int index, RoutePage<dynamic>? e) =>
-              e != null && index == pages.length - 1);
+          (int index, RoutePage<dynamic>? e) => e != null && index == pages.length - 1);
     }
   }
 
@@ -204,6 +195,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     switch (pageState) {
       case PageState.replace:
         pages.removeLast();
+        updateWidgetIfNeed(page);
+        _popOnTop(page);
         return oldRoutePage ?? page;
       case PageState.clearStack:
         pages.clear();
@@ -254,8 +247,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   ) {
     if (pages.contains(page)) {
       if (null != page.key) {
-        throw Exception(
-            '${page.name}${page.key} was already exists in the pages, '
+        throw Exception('${page.name}${page.key} was already exists in the pages, '
             'please change the key or PageState. '
             'Ensure that your keys do not exist at the same time.');
       }
@@ -272,9 +264,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   Future<bool> updateWidgetIfNeed<T>(RoutePage<T?> page) async {
-    final RoutePage? oldRoutePage = pages
-        .whereType<RoutePage<T?>>()
-        .singleWhereOrNull((element) => element == page);
+    final RoutePage? oldRoutePage =
+        pages.whereType<RoutePage<T?>>().singleWhereOrNull((element) => element == page);
     final Widget? oldWidget = oldRoutePage?.pageConfiguration.child;
     if (oldWidget is! Screen) {
       return false;
@@ -294,8 +285,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
       return false;
     }
 
-    return await currentWidget.events[ScreenEvent.backPressed]?.run(null) ??
-        false;
+    return await currentWidget.events[ScreenEvent.backPressed]?.run(null) ?? false;
   }
 
   Widget? getCurrentWidget() {
