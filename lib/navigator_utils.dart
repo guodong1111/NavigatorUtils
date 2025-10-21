@@ -149,8 +149,7 @@ class NavigatorUtils {
   static Future<T?> _push<T>(
     BuildContext context,
     Widget child, {
-    required Future<T?> Function(AppRouterDelegate delegate, Widget child)
-        block,
+    required Future<T?> Function(AppRouterDelegate delegate, Widget child) block,
   }) async {
     print('[Navigator] NavigatorUtils => push');
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
@@ -159,8 +158,7 @@ class NavigatorUtils {
     if (null != interceptor) {
       Widget? newChild = await interceptor.interceptor(context, child);
       if (null == newChild) {
-        print(
-            '[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
+        print('[Navigator] NavigatorUtils => interceptor(${child.runtimeType})');
         return null;
       }
       child = newChild;
@@ -207,10 +205,12 @@ class NavigatorUtils {
 
   static Widget? getPreviousPage(BuildContext context) {
     final AppRouterDelegate delegate = _getAppRouterDelegate(context);
-    return delegate.pages
-        .getOrNull(delegate.pages.length - 2)
-        ?.pageConfiguration
-        .child;
+    return delegate.pages.getOrNull(delegate.pages.length - 2)?.pageConfiguration.child;
+  }
+
+  static Widget getCurrentWidget(BuildContext context) {
+    final AppRouterDelegate delegate = _getAppRouterDelegate(context);
+    return delegate.getCurrentWidget()!;
   }
 
   static Future<bool> handleBackPressed(BuildContext context) async {

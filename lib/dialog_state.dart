@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
 
 import 'route_page.dart';
 
 class DialogState extends NavigatorObserver {
-
   DialogState(this.currentPage);
 
   final RoutePage<dynamic>? Function() currentPage;
@@ -28,11 +26,16 @@ class DialogState extends NavigatorObserver {
     dialogStateMap[currentPage()] = child;
   }
 
+  void removeState(RoutePage<dynamic> routePage) {
+    print('[Navigator] removeState ${routePage.name}');
+    dialogStateMap[routePage] = null;
+  }
+
+  @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     if (null == route.settings.name) {
       print('[Navigator] pop Dialog/ModalBottomSheet in ${currentPage()?.name}');
       dialogStateMap[currentPage()] = null;
     }
   }
-
 }

@@ -214,11 +214,15 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     final int index = pages.indexOf(page);
 
     print('[Navigator] delegate popOnTop $index');
+    List<RoutePage<dynamic>> removeList = <RoutePage>[];
     if (index > 0) {
+      removeList = pages.sublist(index, pages.length);
       pages.removeRange(index, pages.length);
     } else if (index == 0) {
+      removeList = <RoutePage>[...pages];
       pages.clear();
     }
+    removeList.forEach(dialogState.removeState);
   }
 
   RoutePage<T?>? findOldRoutePage<T extends Object?>(RoutePage<T?> page) {
