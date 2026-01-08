@@ -194,6 +194,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
     switch (pageState) {
       case PageState.replace:
+        updateWidgetIfNeed(page);
         pages.removeLast();
         updateWidgetIfNeed(page);
         _popOnTop(page);
