@@ -194,9 +194,9 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
     switch (pageState) {
       case PageState.replace:
-        updateWidgetIfNeed(page);
+        final Widget? updatedWidget = updateWidgetIfNeed(page);
         pages.removeLast();
-        updateWidgetIfNeed(page);
+        updateWidgetIfNeed(page, updatedWidget: updatedWidget);
         _popOnTop(page);
         return oldRoutePage ?? page;
       case PageState.clearStack:
@@ -268,20 +268,26 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     notifyListeners();
   }
 
-  Future<bool> updateWidgetIfNeed<T>(RoutePage<T?> page) async {
+  Widget? updateWidgetIfNeed<T>(RoutePage<T?> page, {Widget? updatedWidget}) {
     final RoutePage? oldRoutePage =
         pages.whereType<RoutePage<T?>>().singleWhereOrNull((element) => element == page);
     final Widget? oldWidget = oldRoutePage?.pageConfiguration.child;
     if (oldWidget is! Screen) {
-      return false;
+      return null;
     }
 
     final Widget newWidget = page.pageConfiguration.child;
-    if (oldWidget.runtimeType != newWidget.runtimeType) {
-      return false;
+    if (oldWidget.runtimeType != newWidget.runtimeType || updatedWidget == newWidget) {
+      return null;
     }
 
-    return await oldWidget.events[ScreenEvent.update]?.run(newWidget) ?? false;
+    final Future<bool> Function(dynamic)? updateFunction = oldWidget.events[ScreenEvent.update];
+    if (null == updateFunction) {
+      return null;
+    }
+
+    updateFunction.run(newWidget);
+    return oldWidget;
   }
 
   Future<bool> handleBackPressed() async {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 mixin Screen on StatefulWidget {
   final ScreenEvents events = ScreenEvents();
-
 }
 
 mixin ScreenState<T extends Screen> on State<T> {
@@ -22,7 +21,10 @@ mixin ScreenState<T extends Screen> on State<T> {
   }
 
   void initWidgetEvents() {
-    widget.events[ScreenEvent.update] = (data) => updateByNewScreen(data as T);
+    widget.events[ScreenEvent.update] = (data) async {
+      updateByNewScreen(data as T);
+      return false;
+    };
     widget.events[ScreenEvent.backPressed] = (_) => onBackPressed();
   }
 
@@ -33,9 +35,7 @@ mixin ScreenState<T extends Screen> on State<T> {
   }
 
   // return true means the event has been consumed
-  Future<bool> updateByNewScreen(T newScreen) async {
-    return false;
-  }
+  void updateByNewScreen(T newScreen) {}
 
   // return true means the event has been consumed
   Future<bool> onBackPressed() async {
