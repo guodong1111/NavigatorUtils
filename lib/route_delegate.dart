@@ -272,12 +272,12 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     final RoutePage? oldRoutePage =
         pages.whereType<RoutePage<T?>>().singleWhereOrNull((element) => element == page);
     final Widget? oldWidget = oldRoutePage?.pageConfiguration.child;
-    if (oldWidget is! Screen) {
+    if (oldWidget is! Screen || updatedWidget == oldWidget) {
       return null;
     }
 
     final Widget newWidget = page.pageConfiguration.child;
-    if (oldWidget.runtimeType != newWidget.runtimeType || updatedWidget == newWidget) {
+    if (oldWidget.runtimeType != newWidget.runtimeType) {
       return null;
     }
 
