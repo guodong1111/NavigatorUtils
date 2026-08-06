@@ -19,6 +19,7 @@ class NavigatorUtils {
     RouteTransitionsBuilder? transition,
     Duration transitionDuration = const Duration(milliseconds: 300),
     Duration reverseTransitionDuration = const Duration(milliseconds: 300),
+    bool opaque = true,
   }) {
     return _push<T>(
       context,
@@ -32,6 +33,7 @@ class NavigatorUtils {
           transition: transition,
           transitionDuration: transitionDuration,
           reverseTransitionDuration: reverseTransitionDuration,
+          opaque: opaque,
         );
 
         T? result = await delegate.push<T>(child, pageParameter: pageParameter);

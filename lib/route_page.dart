@@ -23,6 +23,7 @@ class PageParameter {
     this.transition,
     this.transitionDuration = const Duration(milliseconds: 300),
     this.reverseTransitionDuration = const Duration(milliseconds: 300),
+    this.opaque = true,
   });
 
   final PageState? state;
@@ -32,6 +33,19 @@ class PageParameter {
   final RouteTransitionsBuilder? transition;
   final Duration transitionDuration;
   final Duration reverseTransitionDuration;
+
+  /// Whether the created route fully obscures previous routes when the
+  /// transition animation is complete. Passed straight through to
+  /// [PageRouteBuilder.opaque] (only meaningful when [transitionType] is not
+  /// [TransitionType.none], since the `else` branch always builds a
+  /// [MaterialPageRoute], which doesn't expose this). Defaults to `true`,
+  /// matching Flutter's own default and every existing caller's behavior.
+  ///
+  /// Set to `false` when the destination route intentionally wants the
+  /// previous route to keep painting underneath during and after the
+  /// transition (e.g. a custom transition that cross-fades its own content
+  /// to reveal the previous screen, instead of relying on a hard cut).
+  final bool opaque;
 }
 
 class PageConfiguration {
@@ -119,6 +133,7 @@ class RoutePage<T> extends Page<T> {
 
       return PageRouteBuilder<T>(
         settings: this,
+        opaque: pageParameter.opaque,
         maintainState: pageParameter.maintainState,
         fullscreenDialog: pageParameter.fullscreenDialog,
         pageBuilder: (BuildContext context, Animation<double> animation,
